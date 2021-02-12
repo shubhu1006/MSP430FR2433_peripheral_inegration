@@ -6,7 +6,16 @@
  */
 
 #include <msp430.h>
+#include <stdint.h>
 #include "my_CLK.h"
+
+void MCU_delayMillisecond(uint32_t n_ms)
+{
+    while (n_ms--)
+    {
+        __delay_cycles(DELAY_MS);      // clock speed in Hz divined by 1000
+    }
+}
 
 void initClockTo16MHz( void )
 {

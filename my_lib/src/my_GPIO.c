@@ -6,6 +6,7 @@
  */
 
 #include <msp430.h>
+#include "gpio.h"
 #include "my_GPIO.h"
 
 void initGPIO( void )
@@ -13,9 +14,8 @@ void initGPIO( void )
     LED_DIR |= LED_PIN;
     LED_OUT &= ~LED_PIN;
 
-    // Configure GPIO
-    P1SEL1 &= ~(BIT4 | BIT5);                 // USCI_A0 UART operation
-    P1SEL0 |= BIT4 | BIT5;
+    /* Set Port 1- Pin 2 Reset */
+    GPIO_setAsOutputPin(GPIO_PORT_P1, GPIO_PIN2);
 
     // Disable the GPIO power-on default high-impedance mode to activate
     // previously configured port settings

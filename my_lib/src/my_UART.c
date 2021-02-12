@@ -6,10 +6,15 @@
  */
 
 #include <msp430.h>
+#include "gpio.h"
 #include "my_UART.h"
 
 void initUART( void )
 {
+    // Configure GPIO
+    P1SEL1 &= ~(BIT4 | BIT5);                 // USCI_A0 UART operation
+    P1SEL0 |= BIT4 | BIT5;
+
     // Configure USCI_A0 for UART mode
     UCA0CTLW0 |= UCSWRST;                      // Put eUSCI in reset
 #if UART_MODE == SMCLK_115200

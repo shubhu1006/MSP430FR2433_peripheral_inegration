@@ -45,6 +45,10 @@
 #include "my_PRINTF.h"
 #include "my_UART.h"
 #include "my_CLK.h"
+#include "my_SPI.h"
+#include "mfrc522.h"
+#include "mfrc522_cmd.h"
+#include "mfrc522_reg.h"
 
 //******************************************************************************
 // Main ************************************************************************
@@ -55,19 +59,26 @@
 
 int main(void)
 {
+    uint8_t data = 0;
 
-  WDT_A_hold(WDT_A_BASE);                       // Stop Watchdog
+    WDT_A_hold(WDT_A_BASE);                       // Stop Watchdog
 
-  initGPIO();
-  initClockTo16MHz();
-  initUART();
+    initGPIO();
+    initClockTo16MHz();
+//  initUART();
+    initSPI();
 
-  uart_printf("hello new uart %d\r\n", 10);
+//  uart_printf("hello new uart %d\r\n", 10);
 
-  __bis_SR_register(LPM0_bits + GIE);         // Since SMCLK is source, enter LPM0, interrupts enabled
-  __no_operation();                           // For debugger
+    mfrc522_init();
+    MCU_delayMillisecond(10);
 
-  return 0;
+    data = mfrc522_read(VersionReg);
+
+    __bis_SR_register(LPM0_bits + GIE);         // Since SMCLK is source, enter LPM0, interrupts enabled
+    __no_operation();                           // For debugger
+
+    return 0;
 }
 
 //******************************************************************************
